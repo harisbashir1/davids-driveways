@@ -5,14 +5,10 @@ import QuoteRequestForm from './requestQuoteForm';
 import RevenueReportForm from './revenueForm.js';
 import Modal from "./adminModal";
 
-
 const Dashboard = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState(null);
   const [userType, setUserType] = useState(null); 
-  const [pendingQuotes, setPendingQuotes] = useState([]);
-  const[pendingQuotesByUsername,setPendingQuotesbyUsername] = useState([]);
-
 
 
 //start admin modal related code
@@ -111,8 +107,7 @@ const Dashboard = () => {
 //end of modal related code
 
 
-
-// const [clientResponseNote, setClientResponseNote] = useState('');
+//Client response to quote
 const [clientResponseNotes, setClientResponseNotes] = useState({});
 
 const handleNoteChange = (id, value) => {
@@ -145,7 +140,7 @@ const handleClientResponseToQuote = (id) => {
     .catch((err) => alert(err.message));
 };
 
-
+//accept quote
 const handleAcceptQuote = (id) => {
   const requestBody = {
     id: id,
@@ -169,7 +164,6 @@ const handleAcceptQuote = (id) => {
     .catch((err) => alert(err.message));
 };
 
-
   //decodes the token and extracts username / userType
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -183,8 +177,9 @@ const handleAcceptQuote = (id) => {
     }
   }, [navigate]);
 
-
 //Fetch All Quotes
+const [pendingQuotes, setPendingQuotes] = useState([]);
+
   useEffect(() => {
     fetch('http://localhost:5050/pendingQuotes', {
       headers: {
@@ -196,10 +191,8 @@ const handleAcceptQuote = (id) => {
       .catch((error) => console.error('Error fetching quotes:', error));
   }, []);
 
-
-
-
 //Fetch quotes for an individual User
+const[pendingQuotesByUsername,setPendingQuotesbyUsername] = useState([]);
   useEffect(() => {
     fetch('http://localhost:5050/pendingQuotesByUsername', {
       headers: {
@@ -213,11 +206,11 @@ const handleAcceptQuote = (id) => {
 
 
 
-   //Log out function to clear the token and redirect to login page
-  const handleLogout = () => {
-    localStorage.removeItem('token'); // Remove the JWT token
-    navigate('/login'); // Redirect to login page
-  };
+//Log out function to clear the token and redirect to login page
+const handleLogout = () => {
+  localStorage.removeItem('token'); // Remove the JWT token
+  navigate('/login'); // Redirect to login page
+};
 
 //fill quotes table based on search by ID
     const [searchId, setSearchId] = useState('');
@@ -262,60 +255,60 @@ const handleAcceptQuote = (id) => {
     }, []);
 
 
-        //fill order of work table for David
-        const [ordersOfWork, setOrdersOfWork] = useState([]);
-        useEffect(() => {
-          fetch('http://localhost:5050/ordersOfWork', {
-            headers: {
-              Authorization: localStorage.getItem('token'),
-            },
-          })
-            .then((response) => response.json())
-            .then((data) => setOrdersOfWork(data))
-            .catch((error) => console.error('Error fetching quotes:', error));
-        }, []);
+    //fill order of work table for David
+    const [ordersOfWork, setOrdersOfWork] = useState([]);
+    useEffect(() => {
+      fetch('http://localhost:5050/ordersOfWork', {
+        headers: {
+          Authorization: localStorage.getItem('token'),
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => setOrdersOfWork(data))
+        .catch((error) => console.error('Error fetching quotes:', error));
+    }, []);
+
+    //fill order of work table for Client
+      const [ordersOfWorkForClient, setOrdersOfWorkForClient] = useState([]);
+      useEffect(() => {
+        fetch('http://localhost:5050/ordersOfWorkByUser', {
+          headers: {
+            Authorization: localStorage.getItem('token'),
+          },
+        })
+          .then((response) => response.json())
+          .then((data) =>setOrdersOfWorkForClient(data))
+          .catch((error) => console.error('Error fetching quotes:', error));
+      }, []);
 
 
-        const [ordersOfWorkForClient, setOrdersOfWorkForClient] = useState([]);
-        useEffect(() => {
-          fetch('http://localhost:5050/ordersOfWorkByUser', {
-            headers: {
-              Authorization: localStorage.getItem('token'),
-            },
-          })
-            .then((response) => response.json())
-            .then((data) =>setOrdersOfWorkForClient(data))
-            .catch((error) => console.error('Error fetching quotes:', error));
-        }, []);
-
-
-
-const generateBill = (workOrder) => {
-  const requestBody = {
-    id: workOrder.id,
-    address: workOrder.address,
-    squareFeet: workOrder.squareFeet,  
-    price: workOrder.proposedPrice,  
-    username: workOrder.username,
-  };
-  fetch('http://localhost:5050/generateBill', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: localStorage.getItem('token'),
-    },
-    body: JSON.stringify(requestBody)
-  })
-    .then((res) => {
-      if (res.ok) {
-        alert('Response submitted successfully');
-        handleClose();
-      } else {
-        throw new Error('Failed to submit response');
-      }
+  //generating bill
+  const generateBill = (workOrder) => {
+    const requestBody = {
+      id: workOrder.id,
+      address: workOrder.address,
+      squareFeet: workOrder.squareFeet,  
+      price: workOrder.proposedPrice,  
+      username: workOrder.username,
+    };
+    fetch('http://localhost:5050/generateBill', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: localStorage.getItem('token'),
+      },
+      body: JSON.stringify(requestBody)
     })
-    .catch((err) => alert(err.message));
-};
+      .then((res) => {
+        if (res.ok) {
+          alert('Response submitted successfully');
+          handleClose();
+        } else {
+          throw new Error('Failed to submit response');
+        }
+      })
+      .catch((err) => alert(err.message));
+  };
 
 
 
@@ -346,7 +339,6 @@ useEffect(() => {
     .catch((error) => console.error('Error fetching recent quote:', error));
 }, []);
 
-
 //Fetch most recent quotes for David
 const [recentQuoteDavid, setRecentQuoteDavid] = useState([]);
 useEffect(() => {
@@ -360,12 +352,6 @@ useEffect(() => {
     .catch((error) => console.error('Error fetching recent quote:', error));
 }, []);
 
-
-
-
-
-
-
 //fill quotes table based on search by ID
 const [billSearchID, setBillSearchID] = useState('');
 const [billsLog, setBillsLog] = useState([]);
@@ -375,18 +361,15 @@ const handleBillsLogSearch = async () => {
     alert('Please enter an ID to search.');
     return;
   }
-
   try {
     const response = await fetch(`http://localhost:5050/billsByID?id=${billSearchID}`, {
       headers: {
         Authorization: localStorage.getItem('token'),
       },
     });
-
     if (!response.ok) {
       throw new Error('Failed to fetch bills log');
     }
-
     const data = await response.json();
     setBillsLog(data);
   } catch (error) {
@@ -394,8 +377,7 @@ const handleBillsLogSearch = async () => {
   }
 };
 
-
-//Fetch All Quotes
+//Fetch disputed Bills
 const [disputedBills, setDisputedBills] = useState([]);
 useEffect(() => {
   fetch('http://localhost:5050/disputedBills', {
@@ -409,18 +391,16 @@ useEffect(() => {
 }, []);
 
 
-
+//handle Bill rejection 
 const [billRejectionNotes, setBillRejectionNotes] = useState({});
 
 const handleClientBillNoteChange = (bill_id, value) => {
   setBillRejectionNotes(prev => ({ ...prev, [bill_id]: value }));
 };
-
 const handleRejectBill = (bill_id) => {
   const requestBody = {
     id: bill_id,
     note : billRejectionNotes[bill_id]
-    
   };
   fetch('http://localhost:5050/rejectBill', {
     method: 'POST',
@@ -441,8 +421,7 @@ const handleRejectBill = (bill_id) => {
     .catch((err) => alert(err.message));
 };
 
-//PAY BILL
-
+//handle bill payment
 const handlePayBill = (bill_id) => {
   const requestBody = {
     id: bill_id,
@@ -466,7 +445,7 @@ const handlePayBill = (bill_id) => {
     .catch((err) => alert(err.message));
 };
 
-//RESEND BILL TO CLIENT
+//resend bill to client
 const [billResendNotes, setBillResendNotes] = useState({});
 const [billResendPrices, setBillResendPrices] = useState({});
 
@@ -503,7 +482,6 @@ const handleResendBill = (bill_id) => {
     .catch((err) => alert(err.message));
 };
 
-
 //Fetch This months quotes
 const [thisMonthsQuotes, setThisMonthsQuotes] = useState([]);
 useEffect(() => {
@@ -517,7 +495,7 @@ useEffect(() => {
     .catch((error) => console.error('Error fetching quotes:', error));
 }, []);
 
-//Fetch This months quotes
+//Fetch late paid bills
 const [latePaidBills, setLatePaidBills] = useState([]);
 useEffect(() => {
   fetch('http://localhost:5050/overdueBills', {
@@ -556,7 +534,7 @@ useEffect(() => {
     .catch((error) => console.error('Error fetching bad clients:', error));
 }, []);
 
-//GOOD CLIENTS
+//fetch good clients
 const [goodClients, setGoodClients] = useState([]);
 useEffect(() => {
   fetch('http://localhost:5050/goodClients', {
@@ -569,7 +547,7 @@ useEffect(() => {
     .catch((error) => console.error('Error fetching good clients:', error));
 }, []);
 
-//LARGEST DRIVEWAY
+//fetch largest driveway
 const [largestDriveway, setLargestDriveway] = useState([]);
 useEffect(() => {
   fetch('http://localhost:5050/largestDriveway', {
@@ -582,7 +560,7 @@ useEffect(() => {
     .catch((error) => console.error('Error fetching largest driveway:', error));
 }, []);
 
-//BIG CLIENTS
+//fetch big clients
 const [bigClients, setBigCLients] = useState([]);
 useEffect(() => {
   fetch('http://localhost:5050/bigClients', {
@@ -594,9 +572,6 @@ useEffect(() => {
     .then((data) => setBigCLients(data))
     .catch((error) => console.error('Error fetching Big CLients:', error));
 }, []);
-
-
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -895,7 +870,6 @@ useEffect(() => {
         <strong>Images:</strong> {'Add images when figured out'}
       </div>
 
-
 {/* Conditional rendering for the quote response form */}
 {!selectedQuote.awaitingClientResponse ? (
         <>
@@ -1085,7 +1059,6 @@ useEffect(() => {
             </tbody>
           </table>
 
-
         <h2>Disputed Bills (resend to client)</h2>
 
         <table border="1" style={{ borderCollapse: 'collapse', width: '100%' }}>
@@ -1191,10 +1164,6 @@ useEffect(() => {
         )}
         {quotes_log.length === 0 && <p>No results found.</p>}
       </div>
-
-
-
-
 
         <h2>Generate Revenue Report</h2>
         <RevenueReportForm/>
@@ -1391,14 +1360,6 @@ tie</p>
           </table>
         )}
         {bigClients.length === 0 && <p>No results found.</p>}
-
-
-
-
-
-
-
-
         </>
 
       ) : (
@@ -1472,7 +1433,6 @@ tie</p>
         <h2> Submit a request for quote</h2>
           <QuoteRequestForm />
 
-
         <h2>My pending quotes</h2>
         <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '20px' }}>
   <thead>
@@ -1487,7 +1447,6 @@ tie</p>
       <th style={{ border: '1px solid #ddd', padding: '6px' }}>End Time</th>
       <th style={{ border: '1px solid #ddd', padding: '6px' }}>Accept</th>
       <th style={{ border: '1px solid #ddd', padding: '6px',width: '200px' }}>Respond</th>
-
     </tr>
   </thead>
   <tbody>
@@ -1517,12 +1476,9 @@ tie</p>
               <textarea
               //  value={clientResponseNote}
               //  onChange={(e) => setClientResponseNote(e.target.value)}
-
               //updated clientResponseNote to handle rows independently
               value={clientResponseNotes[quote.id] || ''} 
               onChange={(e) => handleNoteChange(quote.id, e.target.value)} 
-
-
               placeholder="Enter response here..." 
               rows="4" 
               style={{padding: '5px', border: '1px solid #ccc', borderRadius: '4px' }}
@@ -1540,7 +1496,6 @@ tie</p>
   </tbody>
 </table>
         <h2>Bills to Pay</h2>
-
         <table border="1" style={{ borderCollapse: 'collapse', width: '100%' }}>
             <thead>
               <tr>
@@ -1667,8 +1622,6 @@ tie</p>
           </table>
         </>
       )}
-
-
     </div>
   );
 };
