@@ -37,144 +37,98 @@ After cloning, navigate into the project directory:
    - Start your MySQL service (using XAMPP, MAMP, or MySQL Workbench).
    - Open a MySQL client (like MySQL Workbench or the command line) and run the following SQL commands to create the database and tables:
 
-   ```
-   CREATE DATABASE driveway_db;
+```sql
+-- Create the database
+CREATE DATABASE driveway_db;
 
-   USE driveway_db;
+-- Use the database
+USE driveway_db;
 
+-- Create the 'users' table
 CREATE TABLE `users` (
-  `id` int(11) NOT NULL,
-  `username` varchar(100) NOT NULL,
-  `email` varchar(100) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `user_type` varchar(20) NOT NULL DEFAULT 'Client'
+    `id` int(11) NOT NULL,
+    `username` varchar(100) NOT NULL,
+    `email` varchar(100) NOT NULL,
+    `password` varchar(255) NOT NULL,
+    `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+    `user_type` varchar(20) NOT NULL DEFAULT 'Client'
 );
 
+-- Create the 'bills' table
+CREATE TABLE `bills` (
+    `bill_id` int(11) NOT NULL,
+    `quote_id` int(11) NOT NULL,
+    `address` varchar(255) NOT NULL,
+    `squareFeet` int(11) NOT NULL,
+    `price` decimal(10,2) NOT NULL,
+    `username` varchar(255) NOT NULL,
+    `bill_status` varchar(100) DEFAULT NULL,
+    `createdAt` timestamp NOT NULL DEFAULT current_timestamp(),
+    `paidAt` timestamp NULL DEFAULT NULL,
+    `note` varchar(255) DEFAULT NULL
+);
 
-   CREATE TABLE `bills` (
-  `bill_id` int(11) NOT NULL,
-  `quote_id` int(11) NOT NULL,
-  `address` varchar(255) NOT NULL,
-  `squareFeet` int(11) NOT NULL,
-  `price` decimal(10,2) NOT NULL,
-  `username` varchar(255) NOT NULL,
-  `bill_status` varchar(100) DEFAULT NULL,
-  `createdAt` timestamp NOT NULL DEFAULT current_timestamp(),
-  `paidAt` timestamp NULL DEFAULT NULL,
-  `note` varchar(255) DEFAULT NULL
-); 
-
-
+-- Create the 'bills_log' table
 CREATE TABLE `bills_log` (
-  `bill_log_id` int(11) NOT NULL,
-  `bill_id` int(11) NOT NULL,
-  `quote_id` int(11) NOT NULL,
-  `address` varchar(255) NOT NULL,
-  `squareFeet` int(11) NOT NULL,
-  `price` decimal(10,2) NOT NULL,
-  `username` varchar(255) NOT NULL,
-  `bill_status` varchar(100) DEFAULT NULL,
-  `createdAt` timestamp NOT NULL DEFAULT current_timestamp(),
-  `modifiedAt` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `note` varchar(255) DEFAULT NULL,
-  `paidAt` datetime DEFAULT NULL
+    `bill_log_id` int(11) NOT NULL,
+    `bill_id` int(11) NOT NULL,
+    `quote_id` int(11) NOT NULL,
+    `address` varchar(255) NOT NULL,
+    `squareFeet` int(11) NOT NULL,
+    `price` decimal(10,2) NOT NULL,
+    `username` varchar(255) NOT NULL,
+    `bill_status` varchar(100) DEFAULT NULL,
+    `createdAt` timestamp NOT NULL DEFAULT current_timestamp(),
+    `modifiedAt` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+    `note` varchar(255) DEFAULT NULL,
+    `paidAt` datetime DEFAULT NULL
 );
 
+-- Create the 'quotes' table
 CREATE TABLE `quotes` (
-  `id` int(11) NOT NULL,
-  `address` varchar(255) NOT NULL,
-  `squareFeet` int(11) NOT NULL,
-  `proposedPrice` decimal(10,2) NOT NULL,
-  `note` text DEFAULT NULL,
-  `createdAt` timestamp NOT NULL DEFAULT current_timestamp(),
-  `username` varchar(100) DEFAULT NULL,
-  `proposed_start` datetime DEFAULT NULL,
-  `proposed_end` datetime DEFAULT NULL,
-  `awaitingClientResponse` tinyint(1) DEFAULT 0,
-  `quote_status` varchar(50) DEFAULT 'pending'
+    `id` int(11) NOT NULL,
+    `address` varchar(255) NOT NULL,
+    `squareFeet` int(11) NOT NULL,
+    `proposedPrice` decimal(10,2) NOT NULL,
+    `note` text DEFAULT NULL,
+    `createdAt` timestamp NOT NULL DEFAULT current_timestamp(),
+    `username` varchar(100) DEFAULT NULL,
+    `proposed_start` datetime DEFAULT NULL,
+    `proposed_end` datetime DEFAULT NULL,
+    `awaitingClientResponse` tinyint(1) DEFAULT 0,
+    `quote_status` varchar(50) DEFAULT 'pending'
 );
 
-
+-- Create the 'quotes_log' table
 CREATE TABLE `quotes_log` (
-  `id` int(11) NOT NULL,
-  `address` varchar(255) NOT NULL,
-  `squareFeet` int(11) NOT NULL,
-  `proposedPrice` decimal(10,2) NOT NULL,
-  `note` text DEFAULT NULL,
-  `createdAt` timestamp NOT NULL DEFAULT current_timestamp(),
-  `username` varchar(100) DEFAULT NULL,
-  `proposed_start` datetime DEFAULT NULL,
-  `proposed_end` datetime DEFAULT NULL,
-  `quote_status` varchar(50) DEFAULT NULL,
-  `logID` int(11) NOT NULL
-); 
+    `id` int(11) NOT NULL,
+    `address` varchar(255) NOT NULL,
+    `squareFeet` int(11) NOT NULL,
+    `proposedPrice` decimal(10,2) NOT NULL,
+    `note` text DEFAULT NULL,
+    `createdAt` timestamp NOT NULL DEFAULT current_timestamp(),
+    `username` varchar(100) DEFAULT NULL,
+    `proposed_start` datetime DEFAULT NULL,
+    `proposed_end` datetime DEFAULT NULL,
+    `quote_status` varchar(50) DEFAULT NULL,
+    `logID` int(11) NOT NULL
+);
 
+-- Set primary keys for tables
+ALTER TABLE `bills` ADD PRIMARY KEY (`bill_id`);
+ALTER TABLE `bills_log` ADD PRIMARY KEY (`bill_log_id`);
+ALTER TABLE `quotes` ADD PRIMARY KEY (`id`);
+ALTER TABLE `quotes_log` ADD PRIMARY KEY (`logID`);
+ALTER TABLE `users` ADD PRIMARY KEY (`id`), ADD UNIQUE KEY `username` (`username`);
 
-ALTER TABLE `bills`
-  ADD PRIMARY KEY (`bill_id`);
+-- Set AUTO_INCREMENT for tables
+ALTER TABLE `bills` MODIFY `bill_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1009;
+ALTER TABLE `bills_log` MODIFY `bill_log_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=90;
+ALTER TABLE `quotes` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+ALTER TABLE `quotes_log` MODIFY `logID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=90;
+ALTER TABLE `users` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
---
--- Indexes for table `bills_log`
---
-ALTER TABLE `bills_log`
-  ADD PRIMARY KEY (`bill_log_id`);
-
---
--- Indexes for table `quotes`
---
-ALTER TABLE `quotes`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `quotes_log`
---
-ALTER TABLE `quotes_log`
-  ADD PRIMARY KEY (`logID`);
-
---
--- Indexes for table `users`
---
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `username` (`username`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `bills`
---
-ALTER TABLE `bills`
-  MODIFY `bill_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1009;
-
---
--- AUTO_INCREMENT for table `bills_log`
---
-ALTER TABLE `bills_log`
-  MODIFY `bill_log_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=90;
-
---
--- AUTO_INCREMENT for table `quotes`
---
-ALTER TABLE `quotes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
-
---
--- AUTO_INCREMENT for table `quotes_log`
---
-ALTER TABLE `quotes_log`
-  MODIFY `logID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=90;
-
---
--- AUTO_INCREMENT for table `users`
---
-ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
-
-
-
+-- Create triggers for 'quotes' and 'bills' tables
 
 DELIMITER $$
 CREATE TRIGGER `after_quote_insert` AFTER INSERT ON `quotes` FOR EACH ROW BEGIN
@@ -184,37 +138,32 @@ CREATE TRIGGER `after_quote_insert` AFTER INSERT ON `quotes` FOR EACH ROW BEGIN
 END
 $$
 DELIMITER ;
+
 DELIMITER $$
 CREATE TRIGGER `log_quote_updates` AFTER UPDATE ON `quotes` FOR EACH ROW BEGIN
-  INSERT INTO quotes_log( id, address, squareFeet, proposedPrice, note, createdAt, username, proposed_start,proposed_end, quote_status)
-  VALUES (
-    NEW.id, -- Use NEW for the current updated value
-    NEW.address, 
-    NEW.squareFeet, 
-    NEW.proposedPrice, 
-    NEW.note, 
-    NOW(), -- Current timestamp for log creation
-    NEW.username, 
-    NEW.proposed_start, 
-    NEW.proposed_end, 
-    NEW.quote_status -- Use NEW for the updated status
-  );
+    -- Insert into quotes_log when a quote is updated
+    INSERT INTO quotes_log( id, address, squareFeet, proposedPrice, note, createdAt, username, proposed_start, proposed_end, quote_status)
+    VALUES (
+        NEW.id, NEW.address, NEW.squareFeet, NEW.proposedPrice, NEW.note, NOW(), NEW.username, NEW.proposed_start, NEW.proposed_end, NEW.quote_status
+    );
 END
 $$
 DELIMITER ;
-
 
 DELIMITER $$
 CREATE TRIGGER `after_bill_insert` AFTER INSERT ON `bills` FOR EACH ROW BEGIN
-  INSERT INTO bills_log (bill_id, quote_id, address, squareFeet, price, username, bill_status, createdAt, note)
-  VALUES (NEW.bill_id, NEW.quote_id, NEW.address, NEW.squareFeet, NEW.price, NEW.username, NEW.bill_status, NEW.createdAt, NEW.note);
+    -- Insert into bills_log when a new bill is added
+    INSERT INTO bills_log (bill_id, quote_id, address, squareFeet, price, username, bill_status, createdAt, note)
+    VALUES (NEW.bill_id, NEW.quote_id, NEW.address, NEW.squareFeet, NEW.price, NEW.username, NEW.bill_status, NEW.createdAt, NEW.note);
 END
 $$
 DELIMITER ;
+
 DELIMITER $$
 CREATE TRIGGER `after_bill_update` AFTER UPDATE ON `bills` FOR EACH ROW BEGIN
-  INSERT INTO bills_log (bill_id, quote_id, address, squareFeet, price, username, bill_status, createdAt, note, paidAt)
-  VALUES (NEW.bill_id, NEW.quote_id, NEW.address, NEW.squareFeet, NEW.price, NEW.username, NEW.bill_status, OLD.createdAt, NEW.note, NEW.paidAt);
+    -- Insert into bills_log when a bill is updated
+    INSERT INTO bills_log (bill_id, quote_id, address, squareFeet, price, username, bill_status, createdAt, note, paidAt)
+    VALUES (NEW.bill_id, NEW.quote_id, NEW.address, NEW.squareFeet, NEW.price, NEW.username, NEW.bill_status, OLD.createdAt, NEW.note, NEW.paidAt);
 END
 $$
 DELIMITER ;
