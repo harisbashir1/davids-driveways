@@ -35,9 +35,9 @@ After cloning, navigate into the project directory:
 3. **Create the MySQL Database and Table**:
 
    - Start your MySQL service (using XAMPP, MAMP, or MySQL Workbench).
-   - Open a MySQL client (like MySQL Workbench or the command line) and run the following SQL command to create the database and tables:
+   - Open a MySQL client (like MySQL Workbench or the command line) and run the following SQL commands to create the database and tables:
 
-   ```sql
+   ```
    CREATE DATABASE driveway_db;
 
    USE driveway_db;
