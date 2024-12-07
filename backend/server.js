@@ -112,8 +112,7 @@ app.get('/profile', authenticateToken, (req, res) => {
   });
 });
 
-
-
+//submit a quote endpoint
 app.post('/submit_quote', async (req, res) => {
   const {address, squareFeet, proposedPrice, note, username} = req.body;  
   db.query(
@@ -128,7 +127,7 @@ app.post('/submit_quote', async (req, res) => {
   );
 });
 
-
+//get pending quotes for David
 app.get('/pendingQuotes', authenticateToken, (req, res) => {
   db.query('SELECT * FROM quotes WHERE quote_status = "pending" ', (err, results) => {
     if (err) {
@@ -138,7 +137,7 @@ app.get('/pendingQuotes', authenticateToken, (req, res) => {
   });
 });
 
-
+//get pending quotes for user
 app.get('/pendingQuotesByUsername', authenticateToken, (req, res) => {
   const username = req.user.username;
   db.query('SELECT * FROM quotes WHERE username = ? AND quote_status = "pending"', [username], (err, results) => {
@@ -149,7 +148,7 @@ app.get('/pendingQuotesByUsername', authenticateToken, (req, res) => {
   });
 });
 
-
+//respond to quote endpoint
 app.post('/respondToQuote', authenticateToken, (req, res) => {
   const { id, startDatetime, endDatetime, price} = req.body;
   db.query(`
@@ -162,12 +161,13 @@ app.post('/respondToQuote', authenticateToken, (req, res) => {
     WHERE id = ?`,
      [startDatetime,endDatetime,price,id], (err, results) => {
     if (err) {
-      return res.status(500).json({ message: 'Failed to update', error: err });
+      return res.status(500).json({ message: 'Failed to update quote', error: err });
     }
     res.json(results);
   });
 });
 
+//reject quote endpoint
 app.post('/rejectQuote', authenticateToken, (req, res) => {
   const { id, note } = req.body;
   db.query(`
@@ -184,6 +184,7 @@ app.post('/rejectQuote', authenticateToken, (req, res) => {
   });
 });
 
+//respond to quote (client)
 app.post('/clientResponseToQuote', authenticateToken, (req, res) => {
   const { id, note } = req.body;
   const updatedNote = `${note} - CLIENT`;
@@ -195,12 +196,13 @@ app.post('/clientResponseToQuote', authenticateToken, (req, res) => {
     WHERE id = ?`,
      [updatedNote,id], (err, results) => {
     if (err) {
-      return res.status(500).json({ message: 'Failed to reject quote', error: err });
+      return res.status(500).json({ message: 'Failed to respond to quote', error: err });
     }
     res.json(results);
   });
 });
 
+//accept quotes
 app.post('/acceptQuote', authenticateToken, (req, res) => {
   const { id } = req.body;
   db.query(`
@@ -216,6 +218,7 @@ app.post('/acceptQuote', authenticateToken, (req, res) => {
   });
 });
 
+//get quotes from quotes_log by ID
 app.get('/quotesLogByID', authenticateToken, (req, res) => {
   const { id } = req.query;
   db.query('SELECT * FROM quotes_log WHERE id = ?', [id], (err, results) => {
@@ -226,6 +229,7 @@ app.get('/quotesLogByID', authenticateToken, (req, res) => {
   });
 });
 
+//get quotes by username
 app.get('/quotesLogByUsername', authenticateToken, (req, res) => {
   const username = req.user.username;
   db.query('SELECT * FROM quotes_log WHERE username = ?', [username], (err, results) => {
@@ -236,7 +240,7 @@ app.get('/quotesLogByUsername', authenticateToken, (req, res) => {
   });
 });
 
-
+//most recent quote where client can respond
 app.get('/mostRecentQuoteForClient', authenticateToken, (req, res) => {
   const username = req.user.username;
   const query = `
@@ -262,7 +266,7 @@ WHERE id = (
     res.json(results);
   });
 });
-
+//most recent quote where david can respond
 app.get('/mostRecentQuoteForDavid', authenticateToken, (req, res) => {
   const username = req.user.username;
   const query = `
@@ -289,28 +293,27 @@ WHERE id = (
   });
 });
 
-
 //ORDERS OF WORK-------------------------------------------------------------------------
+//get all orders of work for Davids dashboard
 app.get('/ordersOfWork', authenticateToken, (req, res) => {
   db.query('SELECT * FROM quotes WHERE quote_status = "accepted"', (err, results) => {
     if (err) {
-      return res.status(500).json({ message: 'Failed to retrieve quotes', error: err });
+      return res.status(500).json({ message: 'Failed to retrieve orders of work', error: err });
     }
     res.json(results);
   });
 });
 
-
+//get orders of work by user
 app.get('/ordersOfWorkByUser', authenticateToken, (req, res) => {
   const username = req.user.username;
   db.query('SELECT * FROM quotes WHERE quote_status = "accepted" && username = ?', [username], (err, results) => {
     if (err) {
-      return res.status(500).json({ message: 'Failed to retrieve quotes', error: err });
+      return res.status(500).json({ message: 'Failed to retrieve orders of work for user', error: err });
     }
     res.json(results); 
   });
 });
-
 
 
 //BILLS---------------------------------------------------------------------------
@@ -332,14 +335,14 @@ app.post('/generateBill', authenticateToken, (req, res) => {
     WHERE id = ?`,
      [id], (err, results) => {
     if (err) {
-      return res.status(500).json({ message: 'Failed to reject quote', error: err });
+      return res.status(500).json({ message: 'Failed to generate bill', error: err });
     }
     res.json(results);
     });
   });
 });
 
-
+//fetch bills by User endpoint
 app.get('/billsByUser', authenticateToken, (req, res) => {
   const username = req.user.username;
   db.query('SELECT * FROM bills WHERE bill_status = "pending" && username = ?', [username], (err, results) => {
@@ -349,7 +352,7 @@ app.get('/billsByUser', authenticateToken, (req, res) => {
     res.json(results); 
   });
 });
-
+//fetch bills by ID enpoint
 app.get('/billsByID', authenticateToken, (req, res) => {
   const { id } = req.query;
   db.query('SELECT * FROM bills_log WHERE bill_id = ?', [id], (err, results) => {
@@ -360,11 +363,11 @@ app.get('/billsByID', authenticateToken, (req, res) => {
   });
 });
 
-
+//dispute bills endpoint
 app.get('/disputedBills', authenticateToken, (req, res) => {
   db.query('SELECT * FROM bills WHERE bill_status = "disputed"', (err, results) => {
     if (err) {
-      return res.status(500).json({ message: 'Failed to retrieve quotes', error: err });
+      return res.status(500).json({ message: 'Failed to dispute bill', error: err });
     }
     res.json(results); 
   });
@@ -389,7 +392,7 @@ app.post('/rejectBill', authenticateToken, (req, res) => {
   });
 });
 
-
+//resubmit bill endpoint
 app.post('/resubmitBill', authenticateToken, (req, res) => {
   const { id, note, price } = req.body;
   console.log(req.body);
@@ -405,7 +408,6 @@ app.post('/resubmitBill', authenticateToken, (req, res) => {
     query += ', note = ?';
     queryParams.push("No note from David");
   }
-
   if (price !== undefined) {
     query += ', price = ?';
     queryParams.push(price);
@@ -416,7 +418,7 @@ app.post('/resubmitBill', authenticateToken, (req, res) => {
 
   db.query(query, queryParams, (err, results) => {
     if (err) {
-      return res.status(500).json({ message: 'Failed to reject bill', error: err });
+      return res.status(500).json({ message: 'Failed to resubmit bill', error: err });
     }
     res.json(results);
   });
@@ -463,13 +465,11 @@ app.get('/overdueBills', authenticateToken, (req, res) => {
     WHERE bill_status != 'paid'
       AND createdAt < NOW() - INTERVAL 1 WEEK
   `;
-
   const queryLatePaid = `
     SELECT * FROM bills
     WHERE bill_status = 'paid'
       AND paidAt > createdAt + INTERVAL 1 WEEK
   `;
-
   db.query(query, (err1, unpaidResults) => {
     if (err1) {
       return res.status(500).json({ message: 'Failed to retrieve unpaid bills', error: err1 });
@@ -505,7 +505,7 @@ app.get('/prospectiveClients', authenticateToken, (req, res) => {
   });
 });
 
-//BAD CLIENTS
+//bad clients endpoint
 app.get('/badClients', authenticateToken, (req, res) => {
   const query = 
   `SELECT username
@@ -535,7 +535,7 @@ AND EXISTS (
   });
 });
 
-//GOOD CLIENTS
+//good clients endpoint
 app.get('/goodClients', authenticateToken, (req, res) => {
   const query = 
   `SELECT username
@@ -564,7 +564,7 @@ AND NOT EXISTS (
   });
 });
 
-
+//largest driveway endpoint
 app.get('/largestDriveway', authenticateToken, (req, res) => {
   const query = 
   `
@@ -579,12 +579,13 @@ AND quote_status = 'work_complete';
 
   db.query(query, (err, results) => {
     if (err) {
-      return res.status(500).json({ message: 'Failed to retrieve good clients', error: err });
+      return res.status(500).json({ message: 'Failed to retrieve largest driveway', error: err });
     }
     res.json(results);
   });
 });
 
+//big clients endpoint
 app.get('/bigClients', authenticateToken, (req, res) => {
   const query = 
   `
@@ -602,16 +603,15 @@ HAVING order_count = (
     ) AS subquery
 )
   `;
-
   db.query(query, (err, results) => {
     if (err) {
-      return res.status(500).json({ message: 'Failed to retrieve good clients', error: err });
+      return res.status(500).json({ message: 'Failed to retrieve big clients', error: err });
     }
     res.json(results);
   });
 });
 
-
+//generate revenue report endpoint
 app.post('/generateRevenueReport', (req, res) => {
   const { startDate, endDate } = req.body;
   console.log(req.body)
@@ -621,7 +621,6 @@ app.post('/generateRevenueReport', (req, res) => {
     FROM bills
     WHERE paidAt BETWEEN ? AND ?;
   `;
-
   db.query(query, [startDate, endDate], (err, results) => {
     if (err) {
       return res.status(500).json({ message: 'Failed to retrieve specified revenue report', error: err });
@@ -630,7 +629,6 @@ app.post('/generateRevenueReport', (req, res) => {
     const totalRevenue = results && results.length > 0 && results[0].revenue !== null 
       ? (results[0].revenue) 
       : 0;
-
   res.json({ totalRevenue });
 });
 });
