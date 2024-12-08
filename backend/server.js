@@ -37,21 +37,44 @@ app.listen(PORT, () => {
 
 // User registration route
 app.post('/register', async (req, res) => {
-  const { username, email, password } = req.body;  // Extract username, email, and password from request body
-  const hashedPassword = await bcrypt.hash(password, 10);  // Hash the password using bcrypt with 10 salt rounds
+  const {
+    username,
+    email,
+    password,
+    firstName,
+    lastName,
+    address,
+    creditCard,
+    phoneNumber,
+  } = req.body; // Extract fields from request body
 
-  // Insert the new user into the 'users' table
-  db.query(
-    'INSERT INTO users (username, email, password) VALUES (?, ?, ?)',
-    [username, email, hashedPassword],
-    (err, result) => {
-      if (err) {
-        return res.status(500).json({ message: 'User registration failed', error: err });  // Send error response if registration fails
+  try {
+    // Hash the password using bcrypt with 10 salt rounds
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Insert the new user into the 'users' table
+    db.query(
+      `INSERT INTO users 
+      (username, email, password, first_name, last_name, address, credit_card, phone_number) 
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+      [username, email, hashedPassword, firstName, lastName, address, creditCard, phoneNumber],
+      (err, result) => {
+        if (err) {
+          console.error(err);
+          return res
+            .status(500)
+            .json({ message: 'User registration failed', error: err });
+        }
+
+        res.status(201).json({ message: 'User registered successfully' });
       }
-      res.status(201).json({ message: 'User registered successfully' });  // Send success response
-    }
-  );
+    );
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error', error });
+  }
 });
+
 
 // User login route
 app.post('/login', (req, res) => {
@@ -427,6 +450,16 @@ app.post('/resubmitBill', authenticateToken, (req, res) => {
 
 app.post('/payBill', authenticateToken, (req, res) => {
   const { id } = req.body;
+  const userId = req.user.userId;
+
+db.query('SELECT credit_card FROM users WHERE id = ?', [userId], (err, userResults) => {
+    if (err) {
+      return res.status(500).json({ message: 'Failed to fetch card information', error: err });
+    }
+
+ const cardInfo = userResults[0].credit_card;
+ console.log(cardInfo);
+
   db.query(`
     UPDATE bills 
     SET 
@@ -435,10 +468,11 @@ app.post('/payBill', authenticateToken, (req, res) => {
     WHERE bill_id = ?`,
      [id], (err, results) => {
     if (err) {
-      return res.status(500).json({ message: 'Failed to reject bill', error: err });
+      return res.status(500).json({ message: 'Failed to pay bill', error: err });
     }
     res.json(results);
   });
+});
 });
 
 

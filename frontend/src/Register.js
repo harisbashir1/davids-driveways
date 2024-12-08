@@ -6,6 +6,11 @@ const Register = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [address, setAddress] = useState('');
+  const [creditCard, setCreditCard] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
@@ -18,7 +23,11 @@ const Register = () => {
         username,
         email,
         password,
-        
+        firstName,
+        lastName,
+        address,
+        creditCard,
+        phoneNumber,
       });
       if (res.status === 201) {
         navigate('/login');
@@ -27,7 +36,6 @@ const Register = () => {
       setError('Registration failed. Please try again.');
     }
   };
-
 
   return (
     <div className="container" style={{ padding: '20px', maxWidth: '1200px', margin: '0 auto' }}>
@@ -45,6 +53,52 @@ const Register = () => {
 
       {error && <p className="error" style={{ color: 'red' }}>{error}</p>}
       <form onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label>First Name:</label>
+          <input
+            type="text"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label>Last Name:</label>
+          <input
+            type="text"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label>Address:</label>
+          <input
+            type="text"
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label>Credit Card Information:</label>
+          <input
+            type="text"
+            value={creditCard}
+            onChange={(e) => setCreditCard(e.target.value.replace(/\D/g, '').slice(0, 16))}
+            placeholder="#### #### #### ####"
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label>Phone Number:</label>
+          <input
+            type="tel"
+            value={phoneNumber}
+            onChange={(e) => setPhoneNumber(e.target.value)}
+            required
+          />
+        </div>
         <div className="form-group">
           <label>Username:</label>
           <input
@@ -74,7 +128,6 @@ const Register = () => {
         </div>
         <button type="submit">Register</button>
       </form>
-
     </div>
   );
 };
