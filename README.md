@@ -51,7 +51,12 @@ CREATE TABLE `users` (
     `email` varchar(100) NOT NULL,
     `password` varchar(255) NOT NULL,
     `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-    `user_type` varchar(20) NOT NULL DEFAULT 'Client'
+    `user_type` varchar(20) NOT NULL DEFAULT 'Client',
+    `first_name` varchar(100),
+    `last_name` varchar(100),
+    `address` TEXT,
+    `credit_card` varchar(20),
+    `phone_number` varchar(15)
 );
 
 -- Create the 'bills' table
