@@ -1,22 +1,13 @@
-
-
-## Prerequisites
-
-Before you begin, ensure you have met the following requirements:
-- **Node.js** (v14 or later) and npm (Node Package Manager)
-- **MySQL** (Ensure that you have MySQL installed and running)
-
 ## How to Run the Project
 
 Follow these steps to clone and run this project on your local machine.
 
-### Step 1: Clone the Repository
+### Step 1: Clone or Download the project
 
-First, clone this repository to your local machine.
+First, clone or download this project to your local machine.
 
  
 After cloning, navigate into the project directory:
-
 
 ### Step 2: Set Up the Backend (Express & MySQL)
 
@@ -101,7 +92,12 @@ CREATE TABLE `quotes` (
     `proposed_start` datetime DEFAULT NULL,
     `proposed_end` datetime DEFAULT NULL,
     `awaitingClientResponse` tinyint(1) DEFAULT 0,
-    `quote_status` varchar(50) DEFAULT 'pending'
+    `quote_status` varchar(50) DEFAULT 'pending',
+    `p1` varchar(255) DEFAULT NULL,
+    `p2` varchar(255) DEFAULT NULL,
+    `p3` varchar(255) DEFAULT NULL,
+    `p4` varchar(255) DEFAULT NULL,
+    `p5` varchar(255) DEFAULT NULL
 );
 
 -- Create the 'quotes_log' table

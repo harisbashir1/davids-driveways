@@ -1369,8 +1369,8 @@ tie</p>
         {bigClients.length === 0 && <p>No results found.</p>}
 
         <h3>Difficult Clients</h3>
-        <p>List the clients that David Smith completed the most number of orders. List one
-        client if there is no tie, list all the top clients if there is a tie. </p>
+        <p>List the clients who sent three different requests to David Smith but then
+        never followed up afterwards</p>
 
         {difficultClients.length > 0 && (
           <table border="1" style={{ borderCollapse: 'collapse', width: '100%' }}>
