@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const multer = require('multer');
 
 const app = express();
 const PORT = 5050;
@@ -122,18 +123,56 @@ app.get('/dashboard', authenticateToken, (req, res) => {
 
 
 //submit a quote endpoint
-app.post('/submit_quote', async (req, res) => {
-  const {address, squareFeet, proposedPrice, note, username} = req.body;  
-  db.query(
-    'INSERT INTO quotes (address, squareFeet, proposedPrice, note, username) VALUES (?, ?, ?, ?, ?)',
-    [address, squareFeet, proposedPrice, note, username],
-    (err, result) => {
-      if (err) {
-        return res.status(500).json({ message: 'Error Submitting Quote', error: err });  
-      }
-      res.status(201).json({ message: 'Quote submit successfully' });  
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/'); // Directory where files will be stored
+  },
+  filename: (req, file, cb) => {
+    const uniqueName = `${Date.now()}-${file.originalname}`;
+    cb(null, uniqueName); // Generate unique file names
+  },
+});
+
+const upload = multer({ storage });
+// Ensure the uploads folder exists
+const fs = require('fs');
+if (!fs.existsSync('uploads')) {
+  fs.mkdirSync('uploads');
+}
+app.use('/uploads', express.static('uploads'));
+
+app.post('/submit_quote', upload.fields([
+  { name: 'p1', maxCount: 1 },
+  { name: 'p2', maxCount: 1 },
+  { name: 'p3', maxCount: 1 },
+  { name: 'p4', maxCount: 1 },
+  { name: 'p5', maxCount: 1 }
+]), (req, res) => {
+  const { address, squareFeet, proposedPrice, note, username } = req.body;
+
+  const images = {};
+  ['p1', 'p2', 'p3', 'p4', 'p5'].forEach((field) => {
+    images[field] = req.files[field] ? req.files[field][0].filename : null;
+  });
+
+  const query = `
+    INSERT INTO quotes 
+    (address, squareFeet, proposedPrice, note, username, p1, p2, p3, p4, p5) 
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `;
+
+  const values = [
+    address, squareFeet, proposedPrice, note, username,
+    images.p1, images.p2, images.p3, images.p4, images.p5,
+  ];
+
+  db.query(query, values, (err, result) => {
+    if (err) {
+      console.error('Database error:', err);
+      return res.status(500).json({ message: 'Error submitting quote', error: err });
     }
-  );
+    res.status(201).json({ message: 'Quote submitted successfully' });
+  });
 });
 
 //get pending quotes for David
@@ -385,7 +424,6 @@ app.get('/disputedBills', authenticateToken, (req, res) => {
 
 app.post('/rejectBill', authenticateToken, (req, res) => {
   const { id, note } = req.body;
-  console.log(req.body)
   const updatedNote = `${note} - CLIENT`;
   db.query(`
     UPDATE bills 
@@ -404,7 +442,6 @@ app.post('/rejectBill', authenticateToken, (req, res) => {
 //resubmit bill endpoint
 app.post('/resubmitBill', authenticateToken, (req, res) => {
   const { id, note, price } = req.body;
-  console.log(req.body);
 
   let query = 'UPDATE bills SET bill_status = "pending"';
   const queryParams = [];
@@ -634,7 +671,6 @@ HAVING order_count = (
 //generate revenue report endpoint
 app.post('/generateRevenueReport', (req, res) => {
   const { startDate, endDate } = req.body;
-  console.log(req.body)
   const query = 
   `
    SELECT SUM(price) AS revenue

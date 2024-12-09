@@ -640,6 +640,7 @@ useEffect(() => {
             <th style={{ border: '1px solid #ddd', padding: '6px' }}>Square Feet</th>
             <th style={{ border: '1px solid #ddd', padding: '6px' }}>Proposed Price</th>
             <th style={{ border: '1px solid #ddd', padding: '6px' }}>Note</th>
+            <th style={{ border: '1px solid #ddd', padding: '6px' }}>Images</th>
             <th style={{ border: '1px solid #ddd', padding: '6px' }}>Expand/Respond</th>
           </tr>
         </thead>
@@ -652,6 +653,26 @@ useEffect(() => {
               <td style={{ border: '1px solid #ddd', padding: '6px' }}>{quote.squareFeet}</td>
               <td style={{ border: '1px solid #ddd', padding: '6px' }}>${quote.proposedPrice}</td>
               <td style={{ border: '1px solid #ddd', padding: '6px' }}>{quote.note}</td>
+              <td style={{ border: '1px solid #ddd', padding: '6px' }}>
+              <div style={{ display: 'flex', gap: '10px' }}>
+                {['p1', 'p2', 'p3', 'p4', 'p5'].map((imgKey, i) => (
+                  quote[imgKey] ? (
+                    <img
+                      key={i}
+                      src={`http://localhost:5050/uploads/${quote[imgKey]}`}
+                      alt={`Quote Image ${i + 1}`}
+                      style={{
+                        width: '100px',
+                        height: '100px',
+                        objectFit: 'cover',
+                        border: '1px solid #ccc',
+                        borderRadius: '4px',
+                      }}
+                    />
+                  ) : null
+                ))}
+              </div>
+            </td>
               <td>
               {quote.awaitingClientResponse ? (
               <button onClick={() => handleOpen(quote)} 
@@ -694,9 +715,6 @@ useEffect(() => {
       </div>
       <div style={{ marginBottom: '5px' }}>
         <strong>Created at:</strong> {new Date(selectedQuote.createdAt).toLocaleString('en-US')}
-      </div>
-      <div style={{ marginBottom: '5px' }}>
-        <strong>Images:</strong> {'Add images when figured out'}
       </div>
 
 
@@ -807,6 +825,7 @@ useEffect(() => {
             <th style={{ border: '1px solid #ddd', padding: '6px' }}>Square Feet</th>
             <th style={{ border: '1px solid #ddd', padding: '6px' }}>Proposed Price</th>
             <th style={{ border: '1px solid #ddd', padding: '6px' }}>Note</th>
+            <th style={{ border: '1px solid #ddd', padding: '6px' }}>Images</th>
             <th style={{ border: '1px solid #ddd', padding: '6px' }}>Expand/Respond</th>
             {/* <th style={{ border: '1px solid #ddd', padding: '6px' }}>Accept</th> */}
           </tr>
@@ -820,6 +839,26 @@ useEffect(() => {
               <td style={{ border: '1px solid #ddd', padding: '6px' }}>{quote.squareFeet}</td>
               <td style={{ border: '1px solid #ddd', padding: '6px' }}>${quote.proposedPrice}</td>
               <td style={{ border: '1px solid #ddd', padding: '6px' }}>{quote.note}</td>
+              <td style={{ border: '1px solid #ddd', padding: '6px' }}>
+              <div style={{ display: 'flex', gap: '10px' }}>
+                {['p1', 'p2', 'p3', 'p4', 'p5'].map((imgKey, i) => (
+                  quote[imgKey] ? (
+                    <img
+                      key={i}
+                      src={`http://localhost:5050/uploads/${quote[imgKey]}`}
+                      alt={`Quote Image ${i + 1}`}
+                      style={{
+                        width: '100px',
+                        height: '100px',
+                        objectFit: 'cover',
+                        border: '1px solid #ccc',
+                        borderRadius: '4px',
+                      }}
+                    />
+                  ) : null
+                ))}
+              </div>
+            </td>
               <td>
               {quote.awaitingClientResponse ? (
               <button onClick={() => handleOpen(quote)} 
@@ -872,9 +911,6 @@ useEffect(() => {
       </div>
       <div style={{ marginBottom: '5px' }}>
         <strong>Created at:</strong> {new Date(selectedQuote.createdAt).toLocaleString('en-US')}
-      </div>
-      <div style={{ marginBottom: '5px' }}>
-        <strong>Images:</strong> {'Add images when figured out'}
       </div>
 
 {/* Conditional rendering for the quote response form */}
@@ -1401,6 +1437,7 @@ tie</p>
             <thead>
               <tr>
               <th style={{ border: '1px solid #ddd', padding: '6px' }}>Quote REQ ID</th>
+              <th style={{ border: '1px solid #ddd', padding: '6px' }}>Images</th>
               <th style={{ border: '1px solid #ddd', padding: '6px' }}>Username</th>
               <th style={{ border: '1px solid #ddd', padding: '6px' }}>Address</th>
               <th style={{ border: '1px solid #ddd', padding: '6px' }}>Square Feet</th>
@@ -1416,13 +1453,33 @@ tie</p>
               {recentQuoteClient.map((quote) => (
                 <tr key={quote.id}>
               <td style={{ border: '1px solid #ddd', padding: '6px' }}>{quote.id}</td>
+              <td style={{ border: '1px solid #ddd', padding: '6px' }}>
+              <div style={{ display: 'flex', gap: '10px' }}>
+                {['p1', 'p2', 'p3', 'p4', 'p5'].map((imgKey, i) => (
+                  quote[imgKey] ? (
+                    <img
+                      key={i}
+                      src={`http://localhost:5050/uploads/${quote[imgKey]}`}
+                      alt={`Quote Image ${i + 1}`}
+                      style={{
+                        width: '100px',
+                        height: '100px',
+                        objectFit: 'cover',
+                        border: '1px solid #ccc',
+                        borderRadius: '4px',
+                      }}
+                    />
+                  ) : null
+                ))}
+              </div>
+            </td>
               <td style={{ border: '1px solid #ddd', padding: '6px' }}>{quote.username}</td>
               <td style={{ border: '1px solid #ddd', padding: '6px' }}>{quote.address}</td>
               <td style={{ border: '1px solid #ddd', padding: '6px' }}>{quote.squareFeet}</td>
               <td style={{ border: '1px solid #ddd', padding: '6px' }}>${quote.proposedPrice}</td>
               <td style={{ border: '1px solid #ddd', padding: '6px' }}>{quote.note}</td>
-              <td style={{ border: '1px solid #ddd', padding: '6px' }}>{new Date(quote.proposed_start).toLocaleString('en-US')}</td>
-              <td style={{ border: '1px solid #ddd', padding: '6px' }}>{new Date(quote.proposed_end).toLocaleString('en-US')}</td>
+              <td style={{ border: '1px solid #ddd', padding: '6px' }}> {quote.proposed_start ? new Date(quote.proposed_start).toLocaleString('en-US') : 'N/A'}</td>
+              <td style={{ border: '1px solid #ddd', padding: '6px' }}> {quote.proposed_start ? new Date(quote.proposed_end).toLocaleString('en-US') : 'N/A'}</td>
               <td style={{ border: '1px solid #ddd', padding: '6px' }}>
         {quote.awaitingClientResponse ? (
               <button onClick={() => handleAcceptQuote(quote.id)} 
@@ -1465,7 +1522,8 @@ tie</p>
         <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '20px' }}>
   <thead>
     <tr>
-    <th style={{ border: '1px solid #ddd', padding: '6px' }}>Quote REQ ID</th>
+      <th style={{ border: '1px solid #ddd', padding: '6px' }}>Quote REQ ID</th>
+      <th style={{ border: '1px solid #ddd', padding: '6px' }}>Images</th>
       <th style={{ border: '1px solid #ddd', padding: '6px' }}>Username</th>
       <th style={{ border: '1px solid #ddd', padding: '6px' }}>Address</th>
       <th style={{ border: '1px solid #ddd', padding: '6px' }}>Square Feet</th>
@@ -1481,13 +1539,33 @@ tie</p>
     {pendingQuotesByUsername.map((quote) => (
       <tr key={quote.id}>
         <td style={{ border: '1px solid #ddd', padding: '6px' }}>{quote.id}</td>
+        <td style={{ border: '1px solid #ddd', padding: '6px' }}>
+          <div style={{ display: 'flex', gap: '10px' }}>
+            {['p1', 'p2', 'p3', 'p4', 'p5'].map((imgKey, i) => (
+              quote[imgKey] ? (
+                <img
+                  key={i}
+                  src={`http://localhost:5050/uploads/${quote[imgKey]}`}
+                  alt={`Quote Image ${i + 1}`}
+                  style={{
+                    width: '100px',
+                    height: '100px',
+                    objectFit: 'cover',
+                    border: '1px solid #ccc',
+                    borderRadius: '4px',
+                  }}
+                />
+              ) : null
+            ))}
+          </div>
+        </td>
         <td style={{ border: '1px solid #ddd', padding: '6px' }}>{quote.username}</td>
         <td style={{ border: '1px solid #ddd', padding: '6px' }}>{quote.address}</td>
         <td style={{ border: '1px solid #ddd', padding: '6px' }}>{quote.squareFeet}</td>
         <td style={{ border: '1px solid #ddd', padding: '6px' }}>${quote.proposedPrice}</td>
         <td style={{ border: '1px solid #ddd', padding: '6px' }}>{quote.note}</td>
-        <td style={{ border: '1px solid #ddd', padding: '6px' }}>{new Date(quote.proposed_start).toLocaleString('en-US')}</td>
-        <td style={{ border: '1px solid #ddd', padding: '6px' }}>{new Date(quote.proposed_end).toLocaleString('en-US')}</td>
+        <td style={{ border: '1px solid #ddd', padding: '6px' }}> {quote.proposed_start ? new Date(quote.proposed_start).toLocaleString('en-US') : 'N/A'}</td>
+        <td style={{ border: '1px solid #ddd', padding: '6px' }}> {quote.proposed_start ? new Date(quote.proposed_end).toLocaleString('en-US') : 'N/A'}</td>
         <td style={{ border: '1px solid #ddd', padding: '6px' }}>
         {quote.awaitingClientResponse ? (
               <button onClick={() => handleAcceptQuote(quote.id)} 
