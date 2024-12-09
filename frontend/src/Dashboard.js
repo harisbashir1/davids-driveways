@@ -585,10 +585,9 @@ useEffect(() => {
     .then((data) => setDifficultClients(data))
     .catch((error) => console.error('Error fetching Difficult CLients:', error));
 }, []);
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
   return (
     <div className="container" style={{ padding: '20px', maxWidth: '1200px', margin: '0 auto' }}>
 
@@ -645,8 +644,8 @@ useEffect(() => {
           </tr>
         </thead>
         <tbody>
-          {recentQuoteDavid.map((quote, index) => (
-            <tr key={index}>
+        {recentQuoteDavid.map((quote) => (
+              <tr key={quote.id}>
               <td style={{ border: '1px solid #ddd', padding: '6px' }}>{quote.id}</td>
               <td style={{ border: '1px solid #ddd', padding: '6px' }}>{quote.username}</td>
               <td style={{ border: '1px solid #ddd', padding: '6px' }}>{quote.address}</td>
@@ -813,8 +812,8 @@ useEffect(() => {
           </tr>
         </thead>
         <tbody>
-          {pendingQuotes.map((quote, index) => (
-            <tr key={index}>
+          {pendingQuotes.map((quote) => (
+            <tr key={quote.id}>
               <td style={{ border: '1px solid #ddd', padding: '6px' }}>{quote.id}</td>
               <td style={{ border: '1px solid #ddd', padding: '6px' }}>{quote.username}</td>
               <td style={{ border: '1px solid #ddd', padding: '6px' }}>{quote.address}</td>
@@ -1005,8 +1004,8 @@ useEffect(() => {
               </tr>
             </thead>
             <tbody>
-              {quotes_log.map((quote, index) => (
-                <tr key={index}>
+              {quotes_log.map((quote) => (
+                <tr key={quotes_log.logID}>
                   <td>{quote.id}</td>
                   <td>{quote.address}</td>
                   <td>{quote.squareFeet}</td>
@@ -1045,8 +1044,8 @@ useEffect(() => {
               </tr>
             </thead>
             <tbody>
-              {ordersOfWork.map((workOrder, index) => (
-                <tr key={index}>
+              {ordersOfWork.map((workOrder) => (
+                <tr key={workOrder.id}>
                   <td>{workOrder.id}</td>
                   <td>{workOrder.address}</td>
                   <td>{workOrder.squareFeet}</td>
@@ -1085,8 +1084,8 @@ useEffect(() => {
               </tr>
             </thead>
             <tbody>
-              {disputedBills.map((bill, index) => (
-                <tr key={index}>
+              {disputedBills.map((bill) => (
+                <tr key={bill.bill_id}>
                   <td>{bill.bill_id}</td>
                   <td>{bill.quote_id}</td>
                   <td>{bill.address}</td>
@@ -1153,8 +1152,8 @@ useEffect(() => {
               </tr>
             </thead>
             <tbody>
-              {billsLog.map((bill, index) => (
-                <tr key={index}>
+              {billsLog.map((bill) => (
+                <tr key={bill.bill_log_id}>
                   <td>{bill.bill_id}</td>
                   <td>{bill.quote_id}</td>
                   <td>{bill.address}</td>
@@ -1198,14 +1197,14 @@ useEffect(() => {
               </tr>
             </thead>
             <tbody>
-              {thisMonthsQuotes.map((quote, index) => (
-                <tr key={index}>
+              {thisMonthsQuotes.map((quote) => (
+                <tr key={quote.logID}>
                   <td>{quote.id}</td>
                   <td>{quote.address}</td>
                   <td>{quote.squareFeet}</td>
                   <td>{quote.proposedPrice}</td>
                   <td>{quote.note}</td>
-                  <td>{quote.createdAt}</td>
+                  <td>{new Date(quote.createdAt).toLocaleString('en-US')}</td>
                   <td>{quote.username}</td>
                   <td>{new Date(quote.proposed_start).toLocaleString('en-US')}</td>
                   <td>{new Date(quote.proposed_end).toLocaleString('en-US')}</td>
@@ -1238,8 +1237,8 @@ useEffect(() => {
               </tr>
             </thead>
             <tbody>
-              {latePaidBills.map((bill, index) => (
-                <tr key={index}>
+              {latePaidBills.map((bill) => (
+                <tr key={bill.bill_id}>
                   <td>{bill.bill_id}</td>
                   <td>{bill.quote_id}</td>
                   <td>{bill.address}</td>
@@ -1414,8 +1413,8 @@ tie</p>
               </tr>
             </thead>
             <tbody>
-              {recentQuoteClient.map((quote, index) => (
-                <tr key={index}>
+              {recentQuoteClient.map((quote) => (
+                <tr key={quote.id}>
               <td style={{ border: '1px solid #ddd', padding: '6px' }}>{quote.id}</td>
               <td style={{ border: '1px solid #ddd', padding: '6px' }}>{quote.username}</td>
               <td style={{ border: '1px solid #ddd', padding: '6px' }}>{quote.address}</td>
@@ -1479,8 +1478,8 @@ tie</p>
     </tr>
   </thead>
   <tbody>
-    {pendingQuotesByUsername.map((quote, index) => (
-      <tr key={index}>
+    {pendingQuotesByUsername.map((quote) => (
+      <tr key={quote.id}>
         <td style={{ border: '1px solid #ddd', padding: '6px' }}>{quote.id}</td>
         <td style={{ border: '1px solid #ddd', padding: '6px' }}>{quote.username}</td>
         <td style={{ border: '1px solid #ddd', padding: '6px' }}>{quote.address}</td>
@@ -1542,8 +1541,8 @@ tie</p>
               </tr>
             </thead>
             <tbody>
-              {clientBills.map((bill,index) => (
-                <tr key={index}>
+              {clientBills.map((bill) => (
+                <tr key={bill.bill_id}>
                   <td>{bill.bill_id}</td>
                   <td>{bill.quote_id}</td>
                   <td>{bill.address}</td>
@@ -1595,8 +1594,8 @@ tie</p>
               </tr>
             </thead>
             <tbody>
-              {quotes_log_for_client.map((quote, index) => (
-                <tr key={index}>
+              {quotes_log_for_client.map((quote) => (
+                <tr key={quote.logID}>
                   <td>{quote.id}</td>
                   <td>{quote.address}</td>
                   <td>{quote.squareFeet}</td>
@@ -1633,8 +1632,8 @@ tie</p>
               </tr>
             </thead>
             <tbody>
-              {ordersOfWorkForClient.map((workOrder, index) => (
-                <tr key={index}>
+              {ordersOfWorkForClient.map((workOrder) => (
+                <tr key={workOrder.id}>
                   <td>{workOrder.id}</td>
                   <td>{workOrder.address}</td>
                   <td>{workOrder.squareFeet}</td>
