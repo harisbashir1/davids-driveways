@@ -668,4 +668,34 @@ app.post('/generateRevenueReport', (req, res) => {
 });
 
 
+//big clients endpoint
+app.get('/difficultClients', authenticateToken, (req, res) => {
+  const query = 
+  `
+SELECT u.username
+FROM users u
+WHERE (
+    SELECT COUNT(DISTINCT id)
+    FROM quotes_log ql
+    WHERE ql.username = u.username
+) >= 3
+AND NOT EXISTS (
+    SELECT id
+    FROM quotes_log ql2
+    WHERE ql2.username = u.username
+    GROUP BY id
+    HAVING COUNT(*) > 2
+);
+  `;
+  db.query(query, (err, results) => {
+    if (err) {
+      return res.status(500).json({ message: 'Failed to retrieve difficult clients', error: err });
+    }
+    res.json(results);
+  });
+});
+
+
+
+
 

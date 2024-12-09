@@ -572,6 +572,19 @@ useEffect(() => {
     .then((data) => setBigCLients(data))
     .catch((error) => console.error('Error fetching Big CLients:', error));
 }, []);
+
+//fetch difficult clients
+const [difficultClients, setDifficultClients] = useState([]);
+useEffect(() => {
+  fetch('http://localhost:5050/difficultClients', {
+    headers: {
+      Authorization: localStorage.getItem('token'),
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => setDifficultClients(data))
+    .catch((error) => console.error('Error fetching Difficult CLients:', error));
+}, []);
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1336,7 +1349,6 @@ tie</p>
         )}
         {largestDriveway.length === 0 && <p>No results found.</p>}
 
-
         <h3>Big Clients</h3>
         <p>List the clients that David Smith completed the most number of orders. List one
         client if there is no tie, list all the top clients if there is a tie. </p>
@@ -1360,6 +1372,28 @@ tie</p>
           </table>
         )}
         {bigClients.length === 0 && <p>No results found.</p>}
+
+        <h3>Difficult Clients</h3>
+        <p>List the clients that David Smith completed the most number of orders. List one
+        client if there is no tie, list all the top clients if there is a tie. </p>
+
+        {difficultClients.length > 0 && (
+          <table border="1" style={{ borderCollapse: 'collapse', width: '100%' }}>
+            <thead>
+              <tr>
+              <th>Username</th>
+              </tr>
+            </thead>
+            <tbody>
+              {difficultClients.map((user, index) => (
+                <tr key={index}>
+                  <td>{user.username}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+        {difficultClients.length === 0 && <p>No results found.</p>}
         </>
 
       ) : (
