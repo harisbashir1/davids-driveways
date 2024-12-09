@@ -606,11 +606,6 @@ useEffect(() => {
             </Link>
           </li>
           <li>
-            <Link to="/profile" style={{ textDecoration: 'none', fontSize: '1.2rem', color: '#007bff', padding: '10px 20px', backgroundColor: '#f5f5f5', borderRadius: '4px' }}>
-              Profile
-            </Link>
-          </li>
-          <li>
             <button
               onClick={handleLogout}
               style={{

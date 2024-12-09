@@ -30,7 +30,6 @@ const Login = () => {
         <ul style={{ listStyleType: 'none', padding: '0', display: 'flex', justifyContent: 'center', gap: '20px' }}>
           <li><Link to="/" style={menuLinkStyle}>Home</Link></li>
           <li><Link to="/dashboard" style={menuLinkStyle}>Dashboard</Link></li>
-          <li><Link to="/profile" style={menuLinkStyle}>Profile</Link></li>  {/* Replaced Login link with Profile */}
           <li><Link to="/register" style={menuLinkStyle}>Register</Link></li>
         </ul>
       </nav>
@@ -57,24 +56,6 @@ const Login = () => {
         </div>
         <button type="submit">Login</button>
       </form>
-     
-
-      {/* JWT Storage Instruction Paragraph */}
-      <div style={{ marginTop: '20px', padding: '10px', backgroundColor: '#f5f5f5', borderRadius: '8px' }}>
-        <h3 style={{ fontSize: '1.5rem', color: '#007bff', marginBottom: '15px' }}>How to Check the JWT Token on Your Local PC</h3>
-        <p style={{ fontSize: '1.1rem', lineHeight: '1.6', color: '#555' }}>
-          After logging in, the JWT token is stored in your browser’s **localStorage**. You can inspect it by following these steps:
-        </p>
-        <ul style={{ fontSize: '1.1rem', lineHeight: '1.6', color: '#555' }}>
-          <li><strong>Step 1:</strong> Open your browser's **Developer Tools** by right-clicking anywhere on the page and selecting **Inspect** or by pressing `Ctrl + Shift + I` (Windows/Linux) or `Cmd + Option + I` (Mac).</li>
-          <li><strong>Step 2:</strong> Navigate to the **Application** tab (or **Storage** tab in Firefox).</li>
-          <li><strong>Step 3:</strong> In the left-hand panel, expand **Local Storage** and click on your site’s URL (e.g., `localhost`).</li>
-          <li><strong>Step 4:</strong> Look for the key labeled **"token"**. The value associated with it is your JWT token.</li>
-        </ul>
-        <p style={{ fontSize: '1.1rem', lineHeight: '1.6', color: '#555' }}>
-          You can also decode the JWT token to see its contents using tools like **[jwt.io](https://jwt.io/)** by pasting the token into their decoder.
-        </p>
-      </div>
     </div>
   );
 };

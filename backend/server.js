@@ -121,20 +121,6 @@ app.get('/dashboard', authenticateToken, (req, res) => {
 });
 
 
-app.get('/profile', authenticateToken, (req, res) => {
-  const userId = req.user.userId;  // Extract userId from the decoded JWT token
-
-  // Query the database to get the user data based on the userId
-  db.query('SELECT username, email FROM users WHERE id = ?', [userId], (err, result) => {
-    if (err || result.length === 0) {
-      return res.status(404).json({ message: 'User not found' });  // Send error if user not found
-    }
-
-    // Send user profile data as response
-    res.json({ username: result[0].username, email: result[0].email });
-  });
-});
-
 //submit a quote endpoint
 app.post('/submit_quote', async (req, res) => {
   const {address, squareFeet, proposedPrice, note, username} = req.body;  
