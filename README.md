@@ -147,10 +147,15 @@ DELIMITER ;
 
 DELIMITER $$
 CREATE TRIGGER `log_quote_updates` AFTER UPDATE ON `quotes` FOR EACH ROW BEGIN
-    -- Insert into quotes_log when a quote is updated
-    INSERT INTO quotes_log( id, address, squareFeet, proposedPrice, note, createdAt, username, proposed_start, proposed_end, quote_status)
+    -- Insert into quotes_log when a quote is updated, including p1-p5
+    INSERT INTO quotes_log (
+        id, address, squareFeet, proposedPrice, note, createdAt, username, 
+        proposed_start, proposed_end, quote_status, p1, p2, p3, p4, p5
+    )
     VALUES (
-        NEW.id, NEW.address, NEW.squareFeet, NEW.proposedPrice, NEW.note, NOW(), NEW.username, NEW.proposed_start, NEW.proposed_end, NEW.quote_status
+        NEW.id, NEW.address, NEW.squareFeet, NEW.proposedPrice, NEW.note, NOW(),
+        NEW.username, NEW.proposed_start, NEW.proposed_end, NEW.quote_status,
+        OLD.p1, OLD.p2, OLD.p3, OLD.p4, OLD.p5
     );
 END
 $$
