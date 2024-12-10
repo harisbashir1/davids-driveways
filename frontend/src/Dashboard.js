@@ -1076,6 +1076,7 @@ useEffect(() => {
                 <th>Proposed Start</th>
                 <th>Proposed End</th>
                 <th>Status</th>
+                <th>Images</th>
                 <th>Work Complete/Generate Bill</th>
               </tr>
             </thead>
@@ -1092,6 +1093,26 @@ useEffect(() => {
                   <td>{new Date(workOrder.proposed_start).toLocaleString('en-US')}</td>
                   <td>{new Date(workOrder.proposed_end).toLocaleString('en-US')}</td>
                   <td>{workOrder.quote_status}</td>
+                  <td style={{ border: '1px solid #ddd', padding: '6px' }}>
+                  <div style={{ display: 'flex', gap: '10px' }}>
+                    {['p1', 'p2', 'p3', 'p4', 'p5'].map((imgKey, i) => (
+                      workOrder[imgKey] ? (
+                        <img
+                          key={i}
+                          src={`http://localhost:5050/uploads/${workOrder[imgKey]}`}
+                          alt={`Quote Image ${i + 1}`}
+                          style={{
+                            width: '100px',
+                            height: '100px',
+                            objectFit: 'cover',
+                            border: '1px solid #ccc',
+                            borderRadius: '4px',
+                          }}
+                        />
+                      ) : null
+                    ))}
+                  </div>
+                </td>
                   <td>
                      <button onClick={() => generateBill(workOrder)} >
                       Generate Bill
@@ -1698,6 +1719,7 @@ tie</p>
             <thead>
               <tr>
                 <th>ID</th>
+                <th>Images</th>                
                 <th>Address</th>
                 <th>Square Feet</th>
                 <th>Proposed Price</th>
@@ -1713,6 +1735,26 @@ tie</p>
               {ordersOfWorkForClient.map((workOrder) => (
                 <tr key={workOrder.id}>
                   <td>{workOrder.id}</td>
+                  <td style={{ border: '1px solid #ddd', padding: '6px' }}>
+                  <div style={{ display: 'flex', gap: '10px' }}>
+                    {['p1', 'p2', 'p3', 'p4', 'p5'].map((imgKey, i) => (
+                      workOrder[imgKey] ? (
+                        <img
+                          key={i}
+                          src={`http://localhost:5050/uploads/${workOrder[imgKey]}`}
+                          alt={`Quote Image ${i + 1}`}
+                          style={{
+                            width: '100px',
+                            height: '100px',
+                            objectFit: 'cover',
+                            border: '1px solid #ccc',
+                            borderRadius: '4px',
+                          }}
+                        />
+                      ) : null
+                    ))}
+                  </div>
+                </td>
                   <td>{workOrder.address}</td>
                   <td>{workOrder.squareFeet}</td>
                   <td>{workOrder.proposedPrice}</td>

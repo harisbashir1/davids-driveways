@@ -112,7 +112,12 @@ CREATE TABLE `quotes_log` (
     `proposed_start` datetime DEFAULT NULL,
     `proposed_end` datetime DEFAULT NULL,
     `quote_status` varchar(50) DEFAULT NULL,
-    `logID` int(11) NOT NULL
+    `logID` int(11) NOT NULL,
+    `p1` varchar(255) DEFAULT NULL,
+    `p2` varchar(255) DEFAULT NULL,
+    `p3` varchar(255) DEFAULT NULL,
+    `p4` varchar(255) DEFAULT NULL,
+    `p5` varchar(255) DEFAULT NULL
 );
 
 -- Set primary keys for tables
@@ -134,8 +139,8 @@ ALTER TABLE `users` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=
 DELIMITER $$
 CREATE TRIGGER `after_quote_insert` AFTER INSERT ON `quotes` FOR EACH ROW BEGIN
     -- Insert into quotes_log when a new quote is added
-    INSERT INTO quotes_log (id, address, squareFeet, proposedPrice, note, createdAt, username, proposed_start, proposed_end, quote_status)
-    VALUES (NEW.id, NEW.address, NEW.squareFeet, NEW.proposedPrice, NEW.note, NEW.createdAt, NEW.username, NEW.proposed_start, NEW.proposed_end, NEW.quote_status);
+    INSERT INTO quotes_log (id, address, squareFeet, proposedPrice, note, createdAt, username, proposed_start, proposed_end, quote_status,p1,p2,p3,p4,p5)
+    VALUES (NEW.id, NEW.address, NEW.squareFeet, NEW.proposedPrice, NEW.note, NEW.createdAt, NEW.username, NEW.proposed_start, NEW.proposed_end, NEW.quote_status,NEW.p1,NEW.p2,NEW.p3,NEW.p4,NEW.p5);
 END
 $$
 DELIMITER ;
