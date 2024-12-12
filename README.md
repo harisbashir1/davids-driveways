@@ -178,6 +178,31 @@ CREATE TRIGGER `after_bill_update` AFTER UPDATE ON `bills` FOR EACH ROW BEGIN
 END
 $$
 DELIMITER ;
+
+
+
+ALTER TABLE `bills`
+  ADD CONSTRAINT `fk_bills_to_quote_id` FOREIGN KEY (`quote_id`) REFERENCES `quotes` (`id`),
+  ADD CONSTRAINT `fk_bills_to_username` FOREIGN KEY (`username`) REFERENCES `users` (`username`);
+
+--
+-- Constraints for table `bills_log`
+--
+ALTER TABLE `bills_log`
+  ADD CONSTRAINT `fk_bills_log_to_bill_id` FOREIGN KEY (`bill_id`) REFERENCES `bills` (`bill_id`);
+
+--
+-- Constraints for table `quotes`
+--
+ALTER TABLE `quotes`
+  ADD CONSTRAINT `fk_quotes_to_username` FOREIGN KEY (`username`) REFERENCES `users` (`username`);
+
+--
+-- Constraints for table `quotes_log`
+--
+ALTER TABLE `quotes_log`
+  ADD CONSTRAINT `fk_quotes_to_quote_id` FOREIGN KEY (`id`) REFERENCES `quotes` (`id`);
+COMMIT;
    ```
 
 4. **Start the backend server**:
@@ -215,3 +240,15 @@ DELIMITER ;
 1. **Access the Web Application**:
 
    Open your browser and go to `http://localhost:3000`. This will load the homepage of the application.
+
+
+
+### Contributions
+
+    Daniyal -
+    ER Diagrams
+    Upload/Display Images
+
+    Haris -
+    SQL Queries
+    Bills and Quotes
