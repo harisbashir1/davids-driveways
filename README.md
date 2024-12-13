@@ -208,3 +208,5 @@ DELIMITER ;
     Haris -
     SQL Queries
     Bills and Quotes
+
+    Worked Independently apart from recording
