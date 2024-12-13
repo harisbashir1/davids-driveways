@@ -1,6 +1,6 @@
 ## How to Run the Project
 
-Follow these steps to clone and run this project on your local machine.
+Follow these steps to clone and run this project on your local machine. This project started from the jwt-auth-tutorial repo
 
 ### Step 1: Clone or Download the project
 
