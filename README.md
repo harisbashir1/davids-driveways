@@ -161,7 +161,9 @@ $$
 DELIMITER ;
 
 
--- insert David Smith(password david_smith) IMPORTANT!!!!!!!!!!!!!!!!!
+-- insert David Smith(password david_smith) IMPORTANT FOR ADMIN DASHBOARD!!!!!!!!!!!!!!!!!
+--username: david_smith 
+--password: david_smith
 INSERT INTO `users` (`id`, `username`, `email`, `password`, `created_at`, `user_type`, `first_name`, `last_name`, `address`, `credit_card`, `phone_number`) VALUES
 (1, 'david_smith', '1@1.com', '$2b$10$SO3SSZnmdLmXJtNDuKSVQOTwaIZgsQVzXT6V9zi1opc6MBKTVUq6i', '2024-12-12 20:42:48', 'Admin', 'David', 'Smith', '1', '1', '1');
 
