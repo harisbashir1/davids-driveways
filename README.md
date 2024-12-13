@@ -50,6 +50,7 @@ CREATE TABLE `users` (
     `phone_number` varchar(15)
 );
 
+
 -- Create the 'quotes' table
 CREATE TABLE `quotes` (
     `id` int NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -158,6 +159,11 @@ BEGIN
 END
 $$
 DELIMITER ;
+
+
+-- insert David Smith(password david_smith) IMPORTANT!!!!!!!!!!!!!!!!!
+INSERT INTO `users` (`id`, `username`, `email`, `password`, `created_at`, `user_type`, `first_name`, `last_name`, `address`, `credit_card`, `phone_number`) VALUES
+(1, 'david_smith', '1@1.com', '$2b$10$SO3SSZnmdLmXJtNDuKSVQOTwaIZgsQVzXT6V9zi1opc6MBKTVUq6i', '2024-12-12 20:42:48', 'Admin', 'David', 'Smith', '1', '1', '1');
 
    ```
 
